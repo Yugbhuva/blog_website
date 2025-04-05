@@ -1,3 +1,3 @@
-from flask_blog.app import app
+from flask_blog import create_app
 
-application = app
+app = create_app()
