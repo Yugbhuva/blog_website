@@ -12,3 +12,7 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "flask-wtf>=1.2.2",
 ]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

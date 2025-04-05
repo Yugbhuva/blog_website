@@ -2,13 +2,13 @@
 
 {% block title %}
     {% if search_query %}
-        Search Results for "{{ search_query }}" - Flask Blog
+        Search Results for "{{ search_query }}" - Blogside Story
     {% elif current_category %}
-        {{ current_category.name }} - Flask Blog
+        {{ current_category.name }} - Blogside Story
     {% elif current_tag %}
-        {{ current_tag.name }} - Flask Blog
+        {{ current_tag.name }} - Blogside Story
     {% else %}
-        Home - Flask Blog
+        Home - Blogside Story
     {% endif %}
 {% endblock %}
 

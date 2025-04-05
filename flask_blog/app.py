@@ -58,14 +58,23 @@ with app.app_context():
     db.create_all()
     
     # Create default categories if they don't exist
-    categories = ['Technology', 'Travel', 'Food', 'Lifestyle', 'Business']
+    categories = ['Technology', 'Programming', 'Web3', 'Business']
     for category_name in categories:
         if not Category.query.filter_by(name=category_name).first():
             category = Category(name=category_name)
             db.session.add(category)
     
     # Create default tags if they don't exist
-    tags = ['Python', 'Flask', 'Web Development', 'Programming', 'Database', 'SQLAlchemy']
+    tags = ["Tech Trends",
+            "AI & Machine Learning",
+            "Cybersecurity",
+            "Web Development",
+            "Startup Life",
+            "Remote Work",
+            "Freelancing",
+            "Python Programming",
+            "Web3"
+            ]
     for tag_name in tags:
         if not Tag.query.filter_by(name=tag_name).first():
             tag = Tag(name=tag_name)

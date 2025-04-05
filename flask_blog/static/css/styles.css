@@ -142,6 +142,74 @@
     margin-bottom: 2rem;
 }
 
+/* Footer styling */
+.footer-section {
+    background-color: #1e1e1e;
+    border-top: 4px solid #ccc;
+    padding-top: 40px;
+    padding-bottom: 20px;
+}
+
+/* Separation Lines */
+.footer-branding,
+.footer-links {
+    border-color: #444;
+}
+
+.footer-branding {
+    padding-right: 30px;
+}
+
+.footer-links {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.footer-social {
+    padding-left: 30px;
+}
+
+.footer-section h5 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.footer-section p,
+.footer-section a {
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.footer-section a {
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+/* Social hover effect */
+.footer-social a:hover {
+    color: #ffc107;
+    transition: color 0.3s ease;
+}
+
+/* Responsive: remove vertical lines on small screens */
+@media (max-width: 767.98px) {
+    .footer-branding,
+    .footer-links {
+        border: none;
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .footer-social {
+        padding-left: 0;
+    }
+}
+
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .sidebar {
