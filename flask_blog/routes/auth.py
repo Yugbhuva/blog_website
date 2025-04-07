@@ -6,6 +6,7 @@ from datetime import datetime
 from flask_blog.models.user import User
 from flask_blog.forms.login_form import LoginForm
 from flask_blog.forms.register_form import RegisterForm
+from flask_blog.forms.delete_account_form import DeleteAccountForm
 from flask_blog.app import db
 
 auth = Blueprint('auth', __name__)
@@ -73,7 +74,33 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('blog.index'))
 
-@auth.route('/profile')
+@auth.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    return render_template('dashboard.html', title='Dashboard')
+    form = DeleteAccountForm()
+    return render_template('profile.html', title='My Profile', form=form)
+
+@auth.route('/delete-account', methods=['POST'])
+@login_required
+def delete_account():
+    form = DeleteAccountForm()
+    if form.validate_on_submit():
+        # Verify password before allowing account deletion
+        if not current_user.check_password(form.password.data):
+            flash('Incorrect password. Account deletion cancelled.', 'danger')
+            return redirect(url_for('auth.profile'))
+        
+        user = User.query.get(current_user.id)
+        # Log the user out first
+        logout_user()
+        
+        # Delete the user (cascading will handle related posts and comments)
+        db.session.delete(user)
+        db.session.commit()
+        
+        flash('Your account has been permanently deleted.', 'success')
+        return redirect(url_for('blog.index'))
+    
+    # If form validation fails
+    flash('Account deletion failed. Please check your password.', 'danger')
+    return redirect(url_for('auth.profile'))
