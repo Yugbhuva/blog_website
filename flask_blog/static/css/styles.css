@@ -199,16 +199,14 @@
     .footer-branding,
     .footer-links {
         border: none;
-        padding-right: 0;
-        padding-left: 0;
+        padding-right: 20px;
+        padding-left: 20px;
     }
 
     .footer-social {
         padding-left: 0;
     }
 }
-
-
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
