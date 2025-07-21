@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
+<<<<<<< HEAD
 {% block title %}{{ post.title }}{% endblock %}
+=======
+{% block title %}{{ post.title }} - Flask Blog{% endblock %}
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
 
 {% block content %}
 <div class="row">
@@ -32,7 +36,11 @@
             </div>
             
             <div class="post-content mt-4">
+<<<<<<< HEAD
                 {{ post.content|markdown|safe }}
+=======
+                {{ post.content|safe }}
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
             </div>
             
             <div class="post-footer">
@@ -106,6 +114,7 @@
             {% if comments %}
                 <div class="comments-list">
                     {% for comment in comments %}
+<<<<<<< HEAD
                         <div class="comment" id="comment-{{ comment['_id'] }}">
                             <div class="comment-meta">
                                 <strong>{{ comment['author']['username'] }}</strong> &bull;
@@ -122,6 +131,24 @@
                                     
                                     {% if current_user.id == comment['user_id'] or current_user.id == post['user_id'] or current_user.is_admin %}
                                         <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" 
+=======
+                        <div class="comment" id="comment-{{ comment.id }}">
+                            <div class="comment-meta">
+                                <strong>{{ comment.author.username }}</strong> &bull;
+                                <span>{{ comment.created_at.strftime('%B %d, %Y %H:%M') }}</span>
+                            </div>
+                            <div class="comment-content">
+                                {{ comment.content }}
+                            </div>
+                            <div class="comment-actions">
+                                {% if current_user.is_authenticated %}
+                                    <a href="#" class="reply-link" data-comment-id="{{ comment.id }}">
+                                        <i class="fas fa-reply me-1"></i>Reply
+                                    </a>
+                                    
+                                    {% if current_user.id == comment.user_id or current_user.id == post.user_id or current_user.is_admin %}
+                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                               class="d-inline delete-comment-form ms-2">
                                             <button type="submit" class="btn btn-link text-danger p-0">
                                                 <i class="fas fa-trash-alt me-1"></i>Delete
@@ -133,10 +160,17 @@
                             
                             <!-- Reply Form -->
                             {% if current_user.is_authenticated %}
+<<<<<<< HEAD
                                 <div class="reply-form" id="reply-form-{{ comment['_id'] }}">
                                     <form method="post" action="{{ url_for('blog.view_post', slug=post.slug) }}">
                                         {{ form.hidden_tag() }}
                                         {{ form.parent_id(value=comment['_id']) }}
+=======
+                                <div class="reply-form" id="reply-form-{{ comment.id }}">
+                                    <form method="post" action="{{ url_for('blog.view_post', slug=post.slug) }}">
+                                        {{ form.hidden_tag() }}
+                                        {{ form.parent_id(value=comment.id) }}
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                         
                                         <div class="mb-3">
                                             {{ form.content(class="form-control", rows=2, placeholder="Write your reply...") }}
@@ -150,6 +184,7 @@
                             {% endif %}
                             
                             <!-- Nested Replies -->
+<<<<<<< HEAD
                             {% if comment['replies'] %}
                                 {% for reply in comment['replies'] %}
                                     <div class="comment comment-reply" id="comment-{{ reply['_id'] }}">
@@ -163,6 +198,21 @@
                                         <div class="comment-actions">
                                             {% if current_user.id == reply['user_id'] or current_user.id == post['user_id'] or current_user.is_admin %}
                                                 <form action="{{ url_for('blog.delete_comment', comment_id=reply['_id']) }}" method="post" 
+=======
+                            {% if comment.replies.count() > 0 %}
+                                {% for reply in comment.replies %}
+                                    <div class="comment comment-reply" id="comment-{{ reply.id }}">
+                                        <div class="comment-meta">
+                                            <strong>{{ reply.author.username }}</strong> &bull;
+                                            <span>{{ reply.created_at.strftime('%B %d, %Y %H:%M') }}</span>
+                                        </div>
+                                        <div class="comment-content">
+                                            {{ reply.content }}
+                                        </div>
+                                        <div class="comment-actions">
+                                            {% if current_user.id == reply.user_id or current_user.id == post.user_id or current_user.is_admin %}
+                                                <form action="{{ url_for('blog.delete_comment', comment_id=reply.id) }}" method="post" 
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                                       class="d-inline delete-comment-form">
                                                     <button type="submit" class="btn btn-link text-danger p-0">
                                                         <i class="fas fa-trash-alt me-1"></i>Delete
@@ -217,10 +267,17 @@
             <ul class="sidebar-list">
                 {% for category in categories %}
                     <li>
+<<<<<<< HEAD
                         <a href="{{ url_for('blog.category_posts', category_id=category._id) }}" class="text-decoration-none">
                             {{ category.name }}
                             <span class="badge bg-secondary float-end">
                                 {{ category.post_count }}
+=======
+                        <a href="{{ url_for('blog.category_posts', category_id=category.id) }}" class="text-decoration-none">
+                            {{ category.name }}
+                            <span class="badge bg-secondary float-end">
+                                {{ category.posts.filter_by(published=True).count() }}
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                             </span>
                         </a>
                     </li>
