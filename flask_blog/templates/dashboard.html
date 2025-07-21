@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}Dashboard - Flask Blog{% endblock %}
+<<<<<<< HEAD
+{% block title %}Dashboard{% endblock %}
+=======
+{% block title %}Dashboard - Flask Blog{% endblock %}
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
 
 {% block content %}
 <div class="row">
@@ -119,6 +124,11 @@
                                             {% endif %}
                                         </td>
                                         <td>{{ post.comments.count() }}</td>
+<<<<<<< HEAD
+                                        <td>{{ post.comment_count }}</td>
+=======
+                                        <td>{{ post.comments.count() }}</td>
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                         <td>
                                             <a href="{{ url_for('blog.edit_post', slug=post.slug) }}" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
@@ -161,12 +171,24 @@
                                         On post: 
                                         <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
                                             {{ comment.post.title }}
+<<<<<<< HEAD
+                                        <a href="{{ url_for('blog.view_post', slug=comment['post']['slug']) }}#comment-{{ comment['_id'] }}">
+                                            {{ comment['post']['title'] }}
+=======
+                                        <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
+                                            {{ comment.post.title }}
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                         </a>
                                     </h6>
                                     <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                                 </div>
                                 <p class="mb-1">{{ comment.content[:100] }}{% if comment.content|length > 100 %}...{% endif %}</p>
                                 <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
+<<<<<<< HEAD
+                                <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" 
+=======
+                                <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                       class="delete-comment-form">
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash-alt me-1"></i>Delete
@@ -193,12 +215,24 @@
                                                 On post: 
                                                 <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
                                                     {{ comment.post.title }}
+<<<<<<< HEAD
+                                                <a href="{{ url_for('blog.view_post', slug=comment['post']['slug']) }}#comment-{{ comment['_id'] }}">
+                                                    {{ comment['post']['title'] }}
+=======
+                                                <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
+                                                    {{ comment.post.title }}
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                                 </a>
                                             </h6>
                                             <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                                         </div>
                                         <p class="mb-1">{{ comment.content[:100] }}{% if comment.content|length > 100 %}...{% endif %}</p>
                                         <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
+<<<<<<< HEAD
+                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" 
+=======
+                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
+>>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                               class="delete-comment-form">
                                             <button type="submit" class="btn btn-sm btn-danger">
                                                 <i class="fas fa-trash-alt me-1"></i>Delete

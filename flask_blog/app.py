@@ -81,3 +81,6 @@ with app.app_context():
             db.session.add(tag)
     
     db.session.commit()
+
+        if not mongo.db.tags.find_one({'name': tag_name}):
+            mongo.db.tags.insert_one({'name': tag_name})
