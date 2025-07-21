@@ -1,0 +1,216 @@
+/* Additional custom styles for the blog application */
+
+/* Post list styling */
+.post-preview {
+    margin-bottom: 2rem;
+}
+
+.post-preview hr {
+    margin-top: 2rem;
+}
+
+.post-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.post-meta {
+    font-style: italic;
+    color: var(--bs-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.post-summary {
+    margin-bottom: 1rem;
+}
+
+/* Sidebar styling */
+.sidebar-section {
+    margin-bottom: 2rem;
+}
+
+.sidebar-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.sidebar-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.sidebar-list li {
+    margin-bottom: 0.5rem;
+}
+
+.tag-cloud .badge {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Comments styling */
+.comment {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0.25rem;
+}
+
+.comment-meta {
+    font-size: 0.9rem;
+    color: var(--bs-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.comment-content {
+    margin-bottom: 0.5rem;
+}
+
+.comment-reply {
+    margin-left: 2rem;
+    margin-top: 1rem;
+}
+
+.reply-form {
+    display: none;
+    margin-top: 1rem;
+}
+
+/* Post detail styling */
+.post-content {
+    margin-bottom: 2rem;
+    line-height: 1.8;
+}
+
+.post-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+.post-tags {
+    margin-bottom: 1rem;
+}
+
+/* Dashboard styling */
+.dashboard-section {
+    margin-bottom: 2rem;
+}
+
+.dashboard-heading {
+    margin-bottom: 1rem;
+}
+
+.dashboard-list {
+    margin-bottom: 2rem;
+}
+
+.dashboard-item {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0.25rem;
+}
+
+/* Search box styling */
+.search-box {
+    margin-bottom: 2rem;
+}
+
+/* Pagination styling */
+.pagination {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Error page styling */
+.error-container {
+    text-align: center;
+    padding: 5rem 0;
+}
+
+.error-code {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Footer styling */
+.footer-section {
+    background-color: #1e1e1e;
+    border-top: 4px solid #ccc;
+    padding-top: 40px;
+    padding-bottom: 20px;
+}
+
+/* Separation Lines */
+.footer-branding,
+.footer-links {
+    border-color: #444;
+}
+
+.footer-branding {
+    padding-right: 30px;
+}
+
+.footer-links {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.footer-social {
+    padding-left: 30px;
+}
+
+.footer-section h5 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.footer-section p,
+.footer-section a {
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.footer-section a {
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+/* Social hover effect */
+.footer-social a:hover {
+    color: #ffc107;
+    transition: color 0.3s ease;
+}
+
+/* Responsive: remove vertical lines on small screens */
+@media (max-width: 767.98px) {
+    .footer-branding,
+    .footer-links {
+        border: none;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
+    .footer-social {
+        padding-left: 20px;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        margin-top: 3rem;
+    }
+}
