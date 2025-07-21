@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard - Flask Blog{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -118,7 +118,7 @@
                                                 <em>None</em>
                                             {% endif %}
                                         </td>
-                                        <td>{{ post.comment_count }}</td>
+                                        <td>{{ post.comments.count() }}</td>
                                         <td>
                                             <a href="{{ url_for('blog.edit_post', slug=post.slug) }}" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
@@ -159,14 +159,14 @@
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1">
                                         On post: 
-                                        <a href="{{ url_for('blog.view_post', slug=comment['post']['slug']) }}#comment-{{ comment['_id'] }}">
-                                            {{ comment['post']['title'] }}
+                                        <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
+                                            {{ comment.post.title }}
                                         </a>
                                     </h6>
                                     <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                                 </div>
                                 <p class="mb-1">{{ comment.content[:100] }}{% if comment.content|length > 100 %}...{% endif %}</p>
-                                <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" 
+                                <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
                                       class="delete-comment-form">
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash-alt me-1"></i>Delete
@@ -191,14 +191,14 @@
                                         <div class="d-flex w-100 justify-content-between">
                                             <h6 class="mb-1">
                                                 On post: 
-                                                <a href="{{ url_for('blog.view_post', slug=comment['post']['slug']) }}#comment-{{ comment['_id'] }}">
-                                                    {{ comment['post']['title'] }}
+                                                <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
+                                                    {{ comment.post.title }}
                                                 </a>
                                             </h6>
                                             <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                                         </div>
                                         <p class="mb-1">{{ comment.content[:100] }}{% if comment.content|length > 100 %}...{% endif %}</p>
-                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" 
+                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
                                               class="delete-comment-form">
                                             <button type="submit" class="btn btn-sm btn-danger">
                                                 <i class="fas fa-trash-alt me-1"></i>Delete

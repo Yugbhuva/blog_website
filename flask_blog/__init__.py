@@ -1,16 +1,16 @@
 from flask import Flask
-from flask_pymongo import PyMongo
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from .config import config
 
-mongo = PyMongo()
+db = SQLAlchemy()
 login_manager = LoginManager()
 
 def create_app(config_name='default'):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
 
-    mongo.init_app(app)
+    db.init_app(app)
     login_manager.init_app(app)
 
     # Import and register your blueprints here

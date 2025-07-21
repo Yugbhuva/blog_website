@@ -13,7 +13,7 @@ a simple and elegant blog website built using Flask. This platform allows users 
 ## Tech Stack
 - **Backend:** Python, Flask
 - **Frontend:** HTML, CSS (Bootstrap)
-- **Database:** MongoDB
+- **Database:** SQLite
 
 ## Project Stucture
 ```
@@ -48,12 +48,8 @@ venv\Scripts\activte   # On MacOS: source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-**4. Start MongoDB**
-- Make sure you have MongoDB installed and running locally (default: mongodb://localhost:27017/blog_db)
-- Or set the `MONGO_URI` environment variable to your MongoDB connection string.
-
-**5. Run the application**
+**4. Run the application**
 ```bash
 python app.py
 ```
-**6.** Visit ```http://127.0.0.1:5000``` in your browser.
+**5.** Visit ```http://127.0.0.1:5000``` in your browser.

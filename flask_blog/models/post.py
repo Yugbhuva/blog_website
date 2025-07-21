@@ -1,47 +1,46 @@
 from datetime import datetime
-from flask_blog.app import mongo
-from bson.objectid import ObjectId
+from flask_blog.app import db
 
 # Association table for posts and tags
-post_tags = mongo.db.post_tags
+post_tags = db.Table('post_tags',
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id', ondelete='CASCADE'), primary_key=True)
+)
 
-class Post:
-    @staticmethod
-    def create(data):
-        data['created_at'] = datetime.utcnow()
-        data['updated_at'] = datetime.utcnow()
-        result = mongo.db.posts.insert_one(data)
-        return str(result.inserted_id)
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    slug = db.Column(db.String(140), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    published = db.Column(db.Boolean, default=True)
+    
+    # Foreign keys
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True)
+    
+    # Relationships
+    comments = db.relationship('Comment', backref='post', lazy='dynamic', cascade='all, delete-orphan')
+    tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
+    
+    def __repr__(self):
+        return f'<Post {self.title}>'
 
-    @staticmethod
-    def get_by_id(post_id):
-        return mongo.db.posts.find_one({'_id': ObjectId(post_id)})
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    description = db.Column(db.String(200))
+    
+    # Relationship
+    posts = db.relationship('Post', backref='category', lazy='dynamic')
+    
+    def __repr__(self):
+        return f'<Category {self.name}>'
 
-    @staticmethod
-    def update(post_id, data):
-        data['updated_at'] = datetime.utcnow()
-        mongo.db.posts.update_one({'_id': ObjectId(post_id)}, {'$set': data})
-
-    @staticmethod
-    def delete(post_id):
-        mongo.db.posts.delete_one({'_id': ObjectId(post_id)})
-
-class Category:
-    @staticmethod
-    def create(data):
-        result = mongo.db.categories.insert_one(data)
-        return str(result.inserted_id)
-
-    @staticmethod
-    def get_by_id(category_id):
-        return mongo.db.categories.find_one({'_id': ObjectId(category_id)})
-
-class Tag:
-    @staticmethod
-    def create(data):
-        result = mongo.db.tags.insert_one(data)
-        return str(result.inserted_id)
-
-    @staticmethod
-    def get_by_id(tag_id):
-        return mongo.db.tags.find_one({'_id': ObjectId(tag_id)})
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    
+    def __repr__(self):
+        return f'<Tag {self.name}>'
