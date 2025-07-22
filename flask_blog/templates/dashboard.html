@@ -1,11 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard - Flask Blog{% endblock %}
-<<<<<<< HEAD
 {% block title %}Dashboard{% endblock %}
-=======
-{% block title %}Dashboard - Flask Blog{% endblock %}
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
 
 {% block content %}
 <div class="row">
@@ -34,7 +29,12 @@
                     <strong>Email:</strong> {{ current_user.email }}
                 </p>
                 <p>
-                    <strong>Member since:</strong> {{ current_user.date_joined.strftime('%B %d, %Y') }}
+                    <strong>Member since:</strong>
+                    {% if current_user.date_joined %}
+                        {{ current_user.date_joined.strftime('%B %d, %Y') }}
+                    {% else %}
+                        Unknown
+                    {% endif %}
                 </p>
                 <p>
                     <strong>Last login:</strong> {{ current_user.last_login.strftime('%B %d, %Y %H:%M') }}
@@ -47,12 +47,11 @@
                         <em>You haven't added a bio yet.</em>
                     {% endif %}
                 </p>
-                <a href="#" class="btn btn-primary btn-sm">
+                <a href="{{ url_for('auth.edit_profile') }}" class="btn btn-primary btn-sm">
                     <i class="fas fa-edit me-1"></i>Edit Profile
                 </a>
             </div>
         </div>
-        
         <!-- Statistics -->
         <div class="card dashboard-section">
             <div class="card-header bg-primary text-white">
@@ -74,7 +73,6 @@
             </div>
         </div>
     </div>
-    
     <!-- User Posts -->
     <div class="col-lg-8">
         <div class="card dashboard-section">
@@ -104,37 +102,32 @@
                                 {% for post in posts %}
                                     <tr>
                                         <td>
-                                            <a href="{{ url_for('blog.view_post', slug=post.slug) }}">
-                                                {{ post.title }}
+                                            <a href="{{ url_for('blog.view_post', slug=post['slug']) }}">
+                                                {{ post['title'] }}
                                             </a>
                                         </td>
-                                        <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
+                                        <td>{{ post['created_at'].strftime('%Y-%m-%d') }}</td>
                                         <td>
-                                            {% if post.published %}
+                                            {% if post['published'] %}
                                                 <span class="badge bg-success">Published</span>
                                             {% else %}
                                                 <span class="badge bg-secondary">Draft</span>
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {% if post.category %}
-                                                {{ post.category.name }}
+                                            {% if post['category'] %}
+                                                {{ post['category']['name'] }}
                                             {% else %}
                                                 <em>None</em>
                                             {% endif %}
                                         </td>
-                                        <td>{{ post.comments.count() }}</td>
-<<<<<<< HEAD
-                                        <td>{{ post.comment_count }}</td>
-=======
-                                        <td>{{ post.comments.count() }}</td>
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
+                                        <td>{{ post['comment_count'] }}</td>
                                         <td>
-                                            <a href="{{ url_for('blog.edit_post', slug=post.slug) }}" class="btn btn-sm btn-primary">
+                                            <a href="{{ url_for('blog.edit_post', slug=post['slug']) }}" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ url_for('blog.delete_post', slug=post.slug) }}" method="post" 
-                                                  class="d-inline delete-post-form">
+                                            <form action="{{ url_for('blog.delete_post', slug=post['slug']) }}" method="post" class="d-inline delete-post-form">
+                                                <input type="hidden" name="from_dashboard" value="1">
                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
@@ -153,7 +146,6 @@
                 {% endif %}
             </div>
         </div>
-        
         <!-- Recent Comments -->
         <div class="card mt-4 dashboard-section">
             <div class="card-header bg-primary text-white">
@@ -169,27 +161,14 @@
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1">
                                         On post: 
-                                        <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
-                                            {{ comment.post.title }}
-<<<<<<< HEAD
                                         <a href="{{ url_for('blog.view_post', slug=comment['post']['slug']) }}#comment-{{ comment['_id'] }}">
                                             {{ comment['post']['title'] }}
-=======
-                                        <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
-                                            {{ comment.post.title }}
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                         </a>
                                     </h6>
-                                    <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                    <small>{{ comment['created_at'].strftime('%Y-%m-%d %H:%M') }}</small>
                                 </div>
-                                <p class="mb-1">{{ comment.content[:100] }}{% if comment.content|length > 100 %}...{% endif %}</p>
-                                <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
-<<<<<<< HEAD
-                                <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" 
-=======
-                                <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
-                                      class="delete-comment-form">
+                                <p class="mb-1">{{ comment['content'][:100] }}{% if comment['content']|length > 100 %}...{% endif %}</p>
+                                <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" class="delete-comment-form">
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash-alt me-1"></i>Delete
                                     </button>
@@ -197,15 +176,12 @@
                             </div>
                         {% endfor %}
                     </div>
-                    
                     {% if comments|length > 5 %}
                         <div class="text-center mt-3">
-                            <button class="btn btn-outline-primary btn-sm" type="button" 
-                                    data-bs-toggle="collapse" data-bs-target="#moreComments">
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#moreComments">
                                 Show More Comments
                             </button>
                         </div>
-                        
                         <div class="collapse mt-3" id="moreComments">
                             <div class="list-group">
                                 {% for comment in comments[5:] %}
@@ -213,27 +189,14 @@
                                         <div class="d-flex w-100 justify-content-between">
                                             <h6 class="mb-1">
                                                 On post: 
-                                                <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
-                                                    {{ comment.post.title }}
-<<<<<<< HEAD
                                                 <a href="{{ url_for('blog.view_post', slug=comment['post']['slug']) }}#comment-{{ comment['_id'] }}">
                                                     {{ comment['post']['title'] }}
-=======
-                                                <a href="{{ url_for('blog.view_post', slug=comment.post.slug) }}#comment-{{ comment.id }}">
-                                                    {{ comment.post.title }}
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
                                                 </a>
                                             </h6>
-                                            <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                            <small>{{ comment['created_at'].strftime('%Y-%m-%d %H:%M') }}</small>
                                         </div>
-                                        <p class="mb-1">{{ comment.content[:100] }}{% if comment.content|length > 100 %}...{% endif %}</p>
-                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
-<<<<<<< HEAD
-                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" 
-=======
-                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment.id) }}" method="post" 
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
-                                              class="delete-comment-form">
+                                        <p class="mb-1">{{ comment['content'][:100] }}{% if comment['content']|length > 100 %}...{% endif %}</p>
+                                        <form action="{{ url_for('blog.delete_comment', comment_id=comment['_id']) }}" method="post" class="delete-comment-form">
                                             <button type="submit" class="btn btn-sm btn-danger">
                                                 <i class="fas fa-trash-alt me-1"></i>Delete
                                             </button>
