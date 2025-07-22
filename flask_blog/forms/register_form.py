@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
-from flask_blog.models.user import User
+from flask_blog.app import mongo
 
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[
@@ -32,11 +32,11 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Register')
     
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = mongo.db.users.find_one({'username': username.data})
         if user:
             raise ValidationError('Username is already taken. Please choose a different one.')
     
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+        user = mongo.db.users.find_one({'email': email.data})
         if user:
             raise ValidationError('Email is already registered. Please use a different one.')

@@ -1,33 +1,42 @@
-from datetime import datetime
-from flask_blog.app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_blog.app import mongo
+from bson import ObjectId
 
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, nullable=False, index=True)
-    email = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    password_hash = db.Column(db.String(256), nullable=False)
-    bio = db.Column(db.Text, nullable=True)
-    date_joined = db.Column(db.DateTime, default=datetime.utcnow)
-    last_login = db.Column(db.DateTime, default=datetime.utcnow)
-    is_admin = db.Column(db.Boolean, default=False)
-    
-    # Relationships
-    posts = db.relationship('Post', backref='author', lazy='dynamic', cascade='all, delete-orphan')
-    comments = db.relationship('Comment', backref='author', lazy='dynamic', cascade='all, delete-orphan')
-    
-    def __init__(self, username, email, password, bio=None):
-        self.username = username
-        self.email = email
-        self.set_password(password)
-        self.bio = bio
-    
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-    
+class MongoUser(UserMixin):
+    def __init__(self, user_doc):
+        self.id = str(user_doc['_id'])
+        self.username = user_doc['username']
+        self.email = user_doc['email']
+        self.password_hash = user_doc['password_hash']
+        self.bio = user_doc.get('bio')
+        self.date_joined = user_doc.get('date_joined')
+        self.last_login = user_doc.get('last_login')
+        self.is_admin = user_doc.get('is_admin', False)
+
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
-    def __repr__(self):
-        return f'<User {self.username}>'
+
+    @staticmethod
+    def get(user_id):
+        user_doc = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user_doc:
+            return MongoUser(user_doc)
+        return None
+
+def get_user_by_id(user_id):
+    return MongoUser.get(user_id)
+
+def create_user(username, email, password, bio=None):
+    from datetime import datetime
+    user = {
+        'username': username,
+        'email': email,
+        'password_hash': generate_password_hash(password),
+        'bio': bio,
+        'is_admin': False,
+        'date_joined': datetime.utcnow()
+    }
+    result = mongo.db.users.insert_one(user)
+    user['_id'] = result.inserted_id
+    return MongoUser(user)

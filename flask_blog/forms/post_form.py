@@ -13,11 +13,11 @@ class PostForm(FlaskForm):
         Length(min=10, message='Content must be at least 10 characters')
     ])
     
-    category_id = SelectField('Category', coerce=int, validators=[
+    category_id = SelectField('Category', coerce=str, validators=[
         DataRequired(message='Please select a category')
     ])
     
-    tags = SelectMultipleField('Tags', coerce=int)
+    tags = SelectMultipleField('Tags', coerce=str)
     
     published = BooleanField('Publish Immediately', default=True)
     

@@ -49,7 +49,6 @@ venv\Scripts\activte   # On MacOS: source venv/bin/activate
 pip install -r requirements.txt
 ```
 **4. Run the application**
-<<<<<<< HEAD
 **4. Start MongoDB**
 - Make sure you have MongoDB installed and running locally (default: mongodb://localhost:27017/blog_db)
 - Or set the `MONGO_URI` environment variable to your MongoDB connection string.
@@ -60,10 +59,3 @@ python main.py
 ```
 **5.** Visit ```http://127.0.0.1:5000``` in your browser.
 **6.** Visit ```http://127.0.0.1:5000``` in your browser.
-=======
-**4. Run the application**
-```bash
-python app.py
-```
-**5.** Visit ```http://127.0.0.1:5000``` in your browser.
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7

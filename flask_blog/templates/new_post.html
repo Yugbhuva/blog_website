@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}New Post - Flask Blog{% endblock %}
-<<<<<<< HEAD
 {% block title %}New Post{% endblock %}
-=======
-{% block title %}New Post - Flask Blog{% endblock %}
->>>>>>> 7ad6b72053b3e6504c7ecf7b9b7734a34cee12e7
+
+{% block styles %}
+    {{ super() }}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -19,7 +20,6 @@
             <div class="card-body">
                 <form method="post">
                     {{ form.hidden_tag() }}
-                    
                     <div class="mb-3">
                         {{ form.title.label(class="form-label") }}
                         {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
@@ -31,11 +31,20 @@
                             </div>
                         {% endif %}
                     </div>
-                    
                     <div class="row mb-3">
                         <div class="col-md-6">
                             {{ form.category_id.label(class="form-label") }}
-                            {{ form.category_id(class="form-select" + (" is-invalid" if form.category_id.errors else "")) }}
+                            {{ form.category_id(class="form-select w-100 mb-2" + (" is-invalid" if form.category_id.errors else ""), id="category_id") }}
+                            <br>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="showCategoryInputBtn">
+                                <i class="fas fa-plus"></i> New Category
+                            </button>
+                            <div id="categoryInputGroup" class="input-group mt-2" style="display:none;">
+                                <input type="text" id="newCategoryName" class="form-control" placeholder="Category Name">
+                                <button type="button" class="btn btn-primary" id="saveCategoryBtn">Save</button>
+                                <button type="button" class="btn btn-secondary" id="cancelCategoryBtn">Cancel</button>
+                            </div>
+                            <div id="categoryError" class="text-danger mt-2"></div>
                             {% if form.category_id.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.category_id.errors %}
@@ -44,10 +53,20 @@
                                 </div>
                             {% endif %}
                         </div>
-                        
                         <div class="col-md-6">
                             {{ form.tags.label(class="form-label") }}
-                            {{ form.tags(class="form-select" + (" is-invalid" if form.tags.errors else "")) }}
+                            {{ form.tags(class="form-select w-100 mb-2" + (" is-invalid" if form.tags.errors else ""), id="tags", multiple="multiple") }}
+                            <br>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="showTagInputBtn">
+                                <i class="fas fa-plus"></i> New Tag
+                            </button>
+                            <div id="tagInputGroup" class="input-group mt-2" style="display:none;">
+                                <input type="text" id="newTagName" class="form-control" placeholder="Tag Name">
+                                <button type="button" class="btn btn-primary" id="saveTagBtn">Save</button>
+                                <button type="button" class="btn btn-secondary" id="cancelTagBtn">Cancel</button>
+                            </div>
+                            <div id="tagError" class="text-danger mt-2"></div>
+                            <div class="form-text">Hold Ctrl (or Cmd) to select multiple tags</div>
                             {% if form.tags.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.tags.errors %}
@@ -55,10 +74,8 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                            <div class="form-text">Hold Ctrl (or Cmd) to select multiple tags</div>
                         </div>
                     </div>
-                    
                     <div class="mb-3">
                         {{ form.content.label(class="form-label") }}
                         {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else ""), rows=12) }}
@@ -70,12 +87,10 @@
                             </div>
                         {% endif %}
                     </div>
-                    
                     <div class="mb-3 form-check">
                         {{ form.published(class="form-check-input") }}
                         {{ form.published.label(class="form-check-label") }}
                     </div>
-                    
                     <div class="d-flex justify-content-between">
                         <a href="{{ url_for('blog.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i>Cancel
@@ -90,11 +105,106 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-    // Auto-resize textarea as content grows
-    document.getElementById('content').addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
-    });
-</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2
+            $('#category_id').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: 'Select a category',
+                allowClear: true
+            });
+            $('#tags').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: 'Select tags',
+                allowClear: true
+            });
+
+            // Inline add category logic
+            $('#showCategoryInputBtn').on('click', function() {
+                $('#categoryInputGroup').show();
+                $(this).hide();
+            });
+            $('#cancelCategoryBtn').on('click', function() {
+                $('#categoryInputGroup').hide();
+                $('#showCategoryInputBtn').show();
+                $('#newCategoryName').val('');
+                $('#categoryError').text('');
+            });
+            $('#saveCategoryBtn').on('click', function() {
+                const categoryName = $('#newCategoryName').val();
+                const errorDiv = $('#categoryError');
+                errorDiv.text('');
+
+                fetch('{{ url_for("blog.add_category") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ form.csrf_token._value() }}' },
+                    body: JSON.stringify({ name: categoryName })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        errorDiv.text(data.error);
+                    } else {
+                        const select = $('#category_id');
+                        if (select.find("option[value='" + data.id + "']").length === 0) {
+                            const newOption = new Option(data.name, data.id, true, true);
+                            select.append(newOption).trigger('change');
+                        }
+                        select.val(data.id).trigger('change');
+                        $('#cancelCategoryBtn').click();
+                    }
+                });
+            });
+
+            // Inline add tag logic
+            $('#showTagInputBtn').on('click', function() {
+                $('#tagInputGroup').show();
+                $(this).hide();
+            });
+            $('#cancelTagBtn').on('click', function() {
+                $('#tagInputGroup').hide();
+                $('#showTagInputBtn').show();
+                $('#newTagName').val('');
+                $('#tagError').text('');
+            });
+            $('#saveTagBtn').on('click', function() {
+                const tagName = $('#newTagName').val();
+                const errorDiv = $('#tagError');
+                errorDiv.text('');
+
+                fetch('{{ url_for("blog.add_tag") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ form.csrf_token._value() }}' },
+                    body: JSON.stringify({ name: tagName })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        errorDiv.text(data.error);
+                    } else {
+                        const select = $('#tags');
+                        if (select.find("option[value='" + data.id + "']").length === 0) {
+                            const newOption = new Option(data.name, data.id, false, false);
+                            select.append(newOption);
+                        }
+                        let values = select.val() || [];
+                        if (!Array.isArray(values)) { values = [values]; }
+                        if (!values.includes(data.id)) { values.push(data.id); }
+                        select.val(values).trigger('change');
+                        $('#cancelTagBtn').click();
+                    }
+                });
+            });
+
+            // Auto-resize textarea
+            $('#content').on('input', function () {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    </script>
 {% endblock %}
