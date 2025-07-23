@@ -5,4 +5,3 @@ flask
 flask-pymongo
 flask-wtf
 flask_sqlalchemy
-markdown

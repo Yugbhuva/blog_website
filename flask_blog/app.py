@@ -1,18 +1,22 @@
 import os
 import logging
-
+from dotenv import load_dotenv
 from flask import Flask
 from flask_pymongo import PyMongo
 from flask_login import LoginManager
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
 
 # configure the database
-app.config["MONGO_URI"] = os.environ.get("MONGO_URI", "mongodb://localhost:27017/blog_db")
+app.config["MONGO_URI"] = os.environ.get(
+    "MONGO_URI",
+    "mongodb+srv://ybhuva817:ZmhsME82t6D4XubH@cluster0.juukili.mongodb.net/Blog_posts?retryWrites=true&w=majority&appName=Cluster0"
+)
 mongo = PyMongo(app)
 
 # Initialize Flask-Login
@@ -33,3 +37,8 @@ with app.app_context():
     # Register blueprints
     app.register_blueprint(auth)
     app.register_blueprint(blog)
+
+categories = list(mongo.db.categories.find())
+print("CATEGORIES:", categories)
+
+print("MONGO_URI:", os.environ.get("MONGO_URI"))
