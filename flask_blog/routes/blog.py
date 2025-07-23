@@ -290,7 +290,7 @@ def category_posts(category_id):
         post['content'] = markdown.markdown(post['content'])
     return render_template(
         'index.html',
-        title=f'Category: {category['name']}',
+        title=f'Category: {category["name"]}',
         posts={'items': posts, 'total': total, 'page': page, 'pages': (total+per_page-1)//per_page},
         categories=categories,
         tags=tags,
