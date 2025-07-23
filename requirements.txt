@@ -7,3 +7,5 @@ flask-wtf
 flask_sqlalchemy
 python-dotenv
 markdown
+dnspython
+certifi
