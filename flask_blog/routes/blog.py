@@ -272,10 +272,10 @@ def category_posts(category_id):
     per_page = 5
     query = {'category_id': ObjectId(category_id), 'published': True}
     posts_cursor = mongo.db.posts.find(query).sort('created_at', -1)
-    total = posts_cursor.count() if hasattr(posts_cursor, 'count') else mongo.db.posts.count_documents(query)
-    posts = list(posts_cursor.skip((page-1)*per_page).limit(per_page))
+    total = mongo.db.posts.count_documents(query)
+    posts = list(posts_cursor.skip((page - 1) * per_page).limit(per_page))
     categories = list(mongo.db.categories.find())
-    for cat in categories:  # <-- changed from 'category' to 'cat'
+    for cat in categories:
         cat['post_count'] = mongo.db.posts.count_documents({'category_id': cat['_id'], 'published': True})
     tags = list(mongo.db.tags.find())
     recent_posts = list(mongo.db.posts.find({'published': True}).sort('created_at', -1).limit(5))
@@ -286,12 +286,12 @@ def category_posts(category_id):
         else:
             post['category'] = None
         post['comment_count'] = mongo.db.comments.count_documents({'post_id': post['_id']})
-        post['tags'] = [mongo.db.tags.find_one({'_id': tag_id}) for tag_id in post.get('tags',[])]
+        post['tags'] = [mongo.db.tags.find_one({'_id': tag_id}) for tag_id in post.get('tags', [])]
         post['content'] = markdown.markdown(post['content'])
     return render_template(
         'index.html',
-        title=f'Category: {category['name']}',
-        posts={'items': posts, 'total': total, 'page': page, 'pages': (total+per_page-1)//per_page},
+        title=f"Category: {category['name']}",
+        posts={'items': posts, 'total': total, 'page': page, 'pages': (total + per_page - 1) // per_page},
         categories=categories,
         tags=tags,
         recent_posts=recent_posts,
@@ -307,8 +307,8 @@ def tag_posts(tag_id):
     per_page = 5
     query = {'tags': ObjectId(tag_id), 'published': True}
     posts_cursor = mongo.db.posts.find(query).sort('created_at', -1)
-    total = posts_cursor.count() if hasattr(posts_cursor, 'count') else mongo.db.posts.count_documents(query)
-    posts = list(posts_cursor.skip((page-1)*per_page).limit(per_page))
+    total = mongo.db.posts.count_documents(query)
+    posts = list(posts_cursor.skip((page - 1) * per_page).limit(per_page))
     categories = list(mongo.db.categories.find())
     for category in categories:
         category['post_count'] = mongo.db.posts.count_documents({'category_id': category['_id'], 'published': True})
@@ -321,12 +321,12 @@ def tag_posts(tag_id):
         else:
             post['category'] = None
         post['comment_count'] = mongo.db.comments.count_documents({'post_id': post['_id']})
-        post['tags'] = [mongo.db.tags.find_one({'_id': tag_id}) for tag_id in post.get('tags',[])]
+        post['tags'] = [mongo.db.tags.find_one({'_id': tag_id}) for tag_id in post.get('tags', [])]
         post['content'] = markdown.markdown(post['content'])
     return render_template(
         'index.html',
-        title=f'Tag: {tag['name']}',
-        posts={'items': posts, 'total': total, 'page': page, 'pages': (total+per_page-1)//per_page},
+        title=f"Tag: {tag['name']}",
+        posts={'items': posts, 'total': total, 'page': page, 'pages': (total + per_page - 1) // per_page},
         categories=categories,
         tags=tags,
         recent_posts=recent_posts,
