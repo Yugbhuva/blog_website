@@ -15,7 +15,7 @@ app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
 # configure the database
 app.config["MONGO_URI"] = os.environ.get(
     "MONGO_URI",
-    "mongodb+srv://ybhuva817:ZmhsME82t6D4XubH@cluster0.juukili.mongodb.net/Blog_posts?retryWrites=true&w=majority&appName=Cluster0"
+    "mongodb+srv://ybhuva817:ZmhsME82t6D4XubH@cluster0.juukili.mongodb.net/Blog_posts?retryWrites=true&w=majority&ssl=true&tlsAllowInvalidCertificates=true&appName=Cluster0"
 )
 mongo = PyMongo(app)
 
